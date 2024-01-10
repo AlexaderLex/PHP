@@ -1,6 +1,8 @@
-// c_log($cArr, false, $s, $e);
+<?php
 
-function c_log($data, $all = true, $start = 0, $end = 0)
+// c_log($cArr, false, true, $s, $e);
+
+function c_log($data, $whole_array = false, $iterate_array = true, $start = 0, $end = 0)
 {
     if (gettype($data) === "string") {
         $s_a = str_split($data, 20)[0];
@@ -18,7 +20,7 @@ function c_log($data, $all = true, $start = 0, $end = 0)
             echo "</script>";
         }
         if ($c_1 === "[") {
-            if ($all) {
+            if ($$iterate_array) {
                 $script = <<<EOL
                 const arr = $data;
                 for (let x = 0; x < arr.length; x++) {
@@ -31,7 +33,7 @@ function c_log($data, $all = true, $start = 0, $end = 0)
                 echo $script;
                 echo "</script>";
             }
-            if (!$all) {
+            if (!$iterate_array) {
                 $script = <<<EOL
                 const arr = $data;
                 for (let x = $start; x < $end; x++) {
@@ -48,7 +50,7 @@ function c_log($data, $all = true, $start = 0, $end = 0)
     }
     if (gettype($data) === "array") {
 
-        if ($all) {
+        if ($iterate_array) {
 
             $script = <<<EOL
                 const arr = $data;
@@ -62,16 +64,26 @@ function c_log($data, $all = true, $start = 0, $end = 0)
             echo $script;
             echo "</script>";
         }
-        if (!$all) {
-            pre_ob($data[0]);
+        if (!$iterate_array) {
             $array = json_encode($data);
             $script = <<<EOL
-                const arr = $array;
+                const arrIterate = $array;
                 for (let x = $start; x < $end; x++) {
-                    // console.log(arr[x]);
-                    console.log(arr[x]);
+                    // console.log(arrIterate[x]);
+                    console.log(arrIterate[x]);
                 }
                 
+            EOL;
+            echo "<script>";
+            echo $script;
+            echo "</script>";
+        }
+
+        if (!$iterate_array && $whole_array) {
+            $array = json_encode($data);
+            $script = <<<EOL
+                const arrWhole = $array;
+                    console.log(arrWhole);
             EOL;
             echo "<script>";
             echo $script;
