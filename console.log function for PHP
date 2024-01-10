@@ -1,6 +1,6 @@
 <?php
 
-// c_log($cArr, false, true, $s, $e);
+// c_log($cArr, false, true, 0, 0);
 
 function c_log($data, $whole_array = false, $iterate_array = true, $start = 0, $end = 0)
 {
