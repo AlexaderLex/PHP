@@ -1,0 +1,91 @@
+// c_log($cArr, false, $s, $e);
+
+function c_log($data, $all = true, $start = 0, $end = 0)
+{
+    if (gettype($data) === "string") {
+        $s_a = str_split($data, 20)[0];
+        $c_1 = $s_a[0];
+        $c_2 = $s_a[1];
+        if ($c_1 !== "[" && $c_1 !== "{") {
+            $string = $data;
+
+            $script = <<<EOF
+            const str = '$string';
+            console.log(str);
+        EOF;
+            echo "<script>";
+            echo $script;
+            echo "</script>";
+        }
+        if ($c_1 === "[") {
+            if ($all) {
+                $script = <<<EOL
+                const arr = $data;
+                for (let x = 0; x < arr.length; x++) {
+                    // console.log(x);
+                    console.log(arr[x]);
+                }
+                
+            EOL;
+                echo "<script>";
+                echo $script;
+                echo "</script>";
+            }
+            if (!$all) {
+                $script = <<<EOL
+                const arr = $data;
+                for (let x = $start; x < $end; x++) {
+                    // console.log(x);
+                    console.log(arr[x]);
+                }
+                
+            EOL;
+                echo "<script>";
+                echo $script;
+                echo "</script>";
+            }
+        }
+    }
+    if (gettype($data) === "array") {
+
+        if ($all) {
+
+            $script = <<<EOL
+                const arr = $data;
+                for (let x = 0; x < arr.length; x++) {
+                    // console.log(x);
+                    console.log(arr[x]);
+                }
+                
+            EOL;
+            echo "<script>";
+            echo $script;
+            echo "</script>";
+        }
+        if (!$all) {
+            pre_ob($data[0]);
+            $array = json_encode($data);
+            $script = <<<EOL
+                const arr = $array;
+                for (let x = $start; x < $end; x++) {
+                    // console.log(arr[x]);
+                    console.log(arr[x]);
+                }
+                
+            EOL;
+            echo "<script>";
+            echo $script;
+            echo "</script>";
+        }
+    }
+    if (gettype($data) === "object") {
+        $obj = json_encode($data);
+        $script = <<<EOL
+                const obj = $obj;
+                    console.log(obj);
+            EOL;
+        echo "<script>";
+        echo $script;
+        echo "</script>";
+    }
+}
