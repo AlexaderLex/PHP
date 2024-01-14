@@ -14,17 +14,15 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
         $c_2 = $s_a[1];
         if ($c_1 !== "[" && $c_1 !== "{") {
             $string = $data;
-
             $script = <<<EOF
-            const str = '$string';
-            console.log(str);
+            console.log('$string');
         EOF;
             echo "<script>";
             echo $script;
             echo "</script>";
         }
         if ($c_1 === "[") {
-            if ($iterate_array && !$whole_array) {
+            if ($iterate_array && !$whole_array && $end === 0) {
                 $script = <<<EOL
                 const arr = $data;
                 for (let x = 0; x < arr.length; x++) {
@@ -37,6 +35,21 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
                 echo $script;
                 echo "</script>";
             }
+
+            if ($iterate_array && !$whole_array && $end !== 0) {
+                $script = <<<EOL
+                const arr = $data;
+                for (let x = $start; x < $end; x++) {
+                    // console.log(x);
+                    console.log(arr[x]);
+                }
+                
+            EOL;
+                echo "<script>";
+                echo $script;
+                echo "</script>";
+            }
+
             if (!$iterate_array && $whole_array) {
                 $script = <<<EOL
                 const arr = $data;
@@ -54,7 +67,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
             $script = <<<EOL
                 const arrIterate = $array;
                 for (let x = $start; x < $end; x++) {
-                    // console.log(arrIterate[x]);
+                    console.log(x);
                     console.log(arrIterate[x]);
                 }
 
@@ -92,8 +105,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
     if (gettype($data) === "object") {
         $obj = json_encode($data);
         $script = <<<EOL
-                const obj = $obj;
-                    console.log(obj);
+            console.log(obj);
             EOL;
         echo "<script>";
         echo $script;
