@@ -8,14 +8,14 @@ $arg = '[data_to_sene_to_console, whole_array = false, iterate_array = true, sta
 
 function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $end = 0)
 {
-    if (gettype($data) === "string") {
+    if (gettype($data) === "string" || gettype($data) === "integer") {
         $s_a = str_split($data, 20)[0];
         $c_1 = $s_a[0];
-        $c_2 = $s_a[1];
+        $c_2 = isset($s_a[1]);
         if ($c_1 !== "[" && $c_1 !== "{") {
             $string = $data;
             $script = <<<EOF
-            console.log('$string');
+            console.log(`$string`);
         EOF;
             echo "<script>";
             echo $script;
@@ -60,6 +60,15 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
                 echo "</script>";
             }
         }
+        if ($c_1 === "{") {
+            $script = <<<EOL
+                const arr = $data;
+                    console.log(arr);
+            EOL;
+            echo "<script>";
+            echo $script;
+            echo "</script>";
+        }
     }
     if (gettype($data) === "array") {
         if ($iterate_array && !$whole_array && $end !== 0) {
@@ -81,7 +90,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
             $script = <<<EOL
                 const arrIterate = $array;
                 for (let x = 0; x < arrIterate.length; x++) {
-                    // console.log(arrIterate[x]);
+                    console.log(x);
                     console.log(arrIterate[x]);
                 }
 
@@ -105,7 +114,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
     if (gettype($data) === "object") {
         $obj = json_encode($data);
         $script = <<<EOL
-            console.log(obj);
+            console.log($obj);
             EOL;
         echo "<script>";
         echo $script;
