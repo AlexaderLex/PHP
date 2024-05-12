@@ -6,8 +6,14 @@ $arg = '[data_to_sene_to_console, whole_array = false, iterate_array = true, sta
  By default you only need to send 'data_to_send_to_console'. Array will not be iterated. To iterate array set 'whole_array' to false and 'iterate_array' to true
 */
 
+/* js file: 
+let arr, arrIterate, arrWhole;
+
+ */
+
 function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $end = 0)
 {
+    
     if (gettype($data) === "string" || gettype($data) === "integer") {
         $s_a = str_split($data, 20)[0];
         $c_1 = $s_a[0];
@@ -24,7 +30,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
         if ($c_1 === "[") {
             if ($iterate_array && !$whole_array && $end === 0) {
                 $script = <<<EOL
-                const arr = $data;
+                arr = $data;
                 for (let x = 0; x < arr.length; x++) {
                     // console.log(x);
                     console.log(arr[x]);
@@ -38,7 +44,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
 
             if ($iterate_array && !$whole_array && $end !== 0) {
                 $script = <<<EOL
-                const arr = $data;
+                arr = $data;
                 for (let x = $start; x < $end; x++) {
                     // console.log(x);
                     console.log(arr[x]);
@@ -52,7 +58,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
 
             if (!$iterate_array && $whole_array) {
                 $script = <<<EOL
-                const arr = $data;
+                arr = $data;
                     console.log(arr);
             EOL;
                 echo "<script>";
@@ -62,7 +68,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
         }
         if ($c_1 === "{") {
             $script = <<<EOL
-                const arr = $data;
+                arr = $data;
                     console.log(arr);
             EOL;
             echo "<script>";
@@ -74,7 +80,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
         if ($iterate_array && !$whole_array && $end !== 0) {
             $array = json_encode($data);
             $script = <<<EOL
-                const arrIterate = $array;
+                arrIterate = $array;
                 for (let x = $start; x < $end; x++) {
                     console.log(x);
                     console.log(arrIterate[x]);
@@ -88,7 +94,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
         if ($iterate_array && !$whole_array && $start === 0 && $end === 0) {
             $array = json_encode($data);
             $script = <<<EOL
-                const arrIterate = $array;
+                arrIterate = $array;
                 for (let x = 0; x < arrIterate.length; x++) {
                     console.log(x);
                     console.log(arrIterate[x]);
@@ -103,7 +109,7 @@ function c_log($data, $whole_array = true, $iterate_array = false, $start = 0, $
         if (!$iterate_array && $whole_array) {
             $array = json_encode($data);
             $script = <<<EOL
-                const arrWhole = $array;
+                arrWhole = $array;
                     console.log(arrWhole);
             EOL;
             echo "<script>";
